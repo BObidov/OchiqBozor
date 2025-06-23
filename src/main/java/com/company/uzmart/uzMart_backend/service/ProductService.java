@@ -41,12 +41,25 @@ public class ProductService {
         productRepository.deleteById(id);
     }
 
-    public List<ProductDto> getAll() {
+    public List<ProductDto> getAllAdmin() {
         List<Product> productList = productRepository.findAllByOrderByAmountAsc();
         return productList.stream()
                 .map(productMapper::toDto)
                 .collect(Collectors.toList());
     }
+
+    public List<ProductDto> getAllPOS() {
+        List<Product> productList = productRepository.findAllByOrderByAmountAsc();
+
+        return productList.stream().map(product -> {
+            ProductDto dto = new ProductDto();
+            dto.setName(product.getName());
+            dto.setAmount(product.getAmount());
+            dto.setPrice(product.getPrice());
+            return dto;
+        }).collect(Collectors.toList());
+    }
+
 
 }
 

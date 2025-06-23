@@ -38,10 +38,16 @@ public class ProductController {
         return ResponseEntity.ok("Deleted");
     }
 
-    @GetMapping("/get-all")
+    @GetMapping("/get-all-admin")
     public ResponseEntity<List<ProductDto>> getAll() {
-        return ResponseEntity.ok(productService.getAll());
+        return ResponseEntity.ok(productService.getAllAdmin());
     }
+
+    @GetMapping("/get-all-POS")
+    public ResponseEntity<List<ProductDto>> getAllPOSProducts() {
+        return ResponseEntity.ok(productService.getAllPOS());
+    }
+
 
 }
 

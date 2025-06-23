@@ -1,8 +1,11 @@
 package com.company.uzmart.uzMart_backend.service;
 
+import com.company.uzmart.uzMart_backend.dto.ProductDto;
 import com.company.uzmart.uzMart_backend.dto.UserDto;
+import com.company.uzmart.uzMart_backend.entity.Product;
 import com.company.uzmart.uzMart_backend.entity.User;
 import com.company.uzmart.uzMart_backend.repository.UserRepository;
+import com.company.uzmart.uzMart_backend.service.mapper.UserMapper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -13,19 +16,10 @@ import java.util.List;
 public class UserService {
 
     private final UserRepository userRepository;
+    private final UserMapper userMapper;
 
     public User create(UserDto dto) {
-        if (userRepository.existsByLogin(dto.getLogin())) {
-            throw new RuntimeException("Login already exists");
-        }
-        User user = User.builder()
-                .name(dto.getName())
-                .surname(dto.getSurname())
-                .login(dto.getLogin())
-                .password(dto.getPassword())
-                .role(dto.getRole())
-                .status(dto.getStatus())
-                .build();
+        User user = userMapper.toEntity(dto);
         return userRepository.save(user);
     }
 
@@ -36,13 +30,10 @@ public class UserService {
 
 
     public User update(Long id, UserDto dto) {
-        User user = getById(id);
-        user.setName(dto.getName());
-        user.setSurname(dto.getSurname());
-        user.setLogin(dto.getLogin());
-        user.setPassword(dto.getPassword());
-        user.setRole(dto.getRole());
-        user.setStatus(dto.getStatus());
+        User user = userRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Product not found"));
+
+        userMapper.updateEntity(user, dto);
         return userRepository.save(user);
     }
 
