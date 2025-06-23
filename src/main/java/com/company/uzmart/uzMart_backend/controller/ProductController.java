@@ -4,6 +4,7 @@ import com.company.uzmart.uzMart_backend.dto.ProductDto;
 import com.company.uzmart.uzMart_backend.entity.Product;
 import com.company.uzmart.uzMart_backend.entity.User;
 import com.company.uzmart.uzMart_backend.service.ProductService;
+import io.swagger.v3.oas.annotations.Operation;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -38,6 +39,7 @@ public class ProductController {
         return ResponseEntity.ok("Deleted");
     }
 
+    @Operation(summary = "Get all products sorted by amount ascending")
     @GetMapping("/get-all-admin")
     public ResponseEntity<List<ProductDto>> getAll() {
         return ResponseEntity.ok(productService.getAllAdmin());
