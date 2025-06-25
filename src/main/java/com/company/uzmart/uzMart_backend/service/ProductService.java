@@ -74,15 +74,19 @@ public class ProductService {
     public List<ProductDto> getAllPOS() {
         List<Product> productList = productRepository.findAllByOrderByAmountAsc();
 
-        return productList.stream().map(product -> {
-            ProductDto dto = new ProductDto();
-            dto.setId(product.getId());
-            dto.setName(product.getName());
-            dto.setAmount(product.getAmount());
-            dto.setPrice(product.getPrice());
-            return dto;
-        }).collect(Collectors.toList());
+        return productList.stream()
+                .filter(product -> product.getBarcode() != null && !product.getBarcode().isBlank()) // faqat barcode borlar
+                .map(product -> {
+                    ProductDto dto = new ProductDto();
+                    dto.setId(product.getId());
+                    dto.setName(product.getName());
+                    dto.setAmount(product.getAmount());
+                    dto.setPrice(product.getPrice());
+                    return dto;
+                })
+                .collect(Collectors.toList());
     }
+
 
 
 }
