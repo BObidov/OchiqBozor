@@ -31,7 +31,7 @@ public class ProductService {
     }
 
     public List<ProductDto> getByBarcode(String barcode) {
-        if (barcode != null && barcode.length() <= 3) {
+        if (barcode != null && barcode.length() >= 2) {
             List<Product> products = productRepository.findByBarcodeStartingWith(barcode);
             return products.stream()
                     .map(productMapper::toDto)
