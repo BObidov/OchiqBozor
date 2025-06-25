@@ -22,7 +22,6 @@ public class UserController {
         return ResponseEntity.ok(userService.create(dto));
     }
 
-    @GetMapping("/get")
     public ResponseEntity<User> getById(@RequestParam Long id) {
         return ResponseEntity.ok(userService.getById(id));
     }
@@ -39,7 +38,6 @@ public class UserController {
         return ResponseEntity.ok("User deleted");
     }
 
-    @GetMapping("/get-all")
     public ResponseEntity<List<User>> getAll() {
         return ResponseEntity.ok(userService.getAll());
     }

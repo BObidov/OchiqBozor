@@ -2,7 +2,6 @@ package com.company.uzmart.uzMart_backend.controller;
 
 import com.company.uzmart.uzMart_backend.dto.ProductDto;
 import com.company.uzmart.uzMart_backend.entity.Product;
-import com.company.uzmart.uzMart_backend.entity.User;
 import com.company.uzmart.uzMart_backend.service.ProductService;
 import io.swagger.v3.oas.annotations.Operation;
 import lombok.RequiredArgsConstructor;
@@ -23,24 +22,20 @@ public class ProductController {
         return ResponseEntity.ok(productService.create(dto));
     }
 
-    @GetMapping("/get")
     public ResponseEntity<List<ProductDto>> getByBarcode(@RequestParam String barcode) {
         return ResponseEntity.ok(productService.getByBarcode(barcode));
     }
 
-    @GetMapping("/get-all-without-barcode")
     public ResponseEntity<List<ProductDto>> getAllWithoutBarcode() {
         List<ProductDto> productList = productService.getAllWithoutBarcode();
         return ResponseEntity.ok(productList);
     }
 
     @Operation(summary = "Get all products sorted by amount ascending")
-    @GetMapping("/get-all-admin")
     public ResponseEntity<List<ProductDto>> getAll() {
         return ResponseEntity.ok(productService.getAllAdmin());
     }
 
-    @GetMapping("/get-all-POS")
     public ResponseEntity<List<ProductDto>> getAllPOSProducts() {
         return ResponseEntity.ok(productService.getAllPOS());
     }
