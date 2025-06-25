@@ -2,14 +2,12 @@ package com.company.uzmart.uzMart_backend.service;
 
 import com.company.uzmart.uzMart_backend.dto.ProductDto;
 import com.company.uzmart.uzMart_backend.entity.Product;
-import com.company.uzmart.uzMart_backend.entity.User;
 import com.company.uzmart.uzMart_backend.repository.ProductRepository;
 import com.company.uzmart.uzMart_backend.service.mapper.ProductMapper;
 import lombok.RequiredArgsConstructor;
-import org.springframework.objenesis.SpringObjenesis;
 import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.PostMapping;
 
+import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -20,14 +18,39 @@ public class ProductService {
     private final ProductMapper productMapper;
 
     public Product create(ProductDto dto) {
+        // Agar barcode mavjud bo‘lsa, uni unique ekanligini tekshiramiz
+        if (dto.getBarcode() != null && !dto.getBarcode().trim().isEmpty()) {
+            boolean exists = productRepository.findByBarcode(dto.getBarcode()).isPresent();
+            if (exists) {
+                throw new RuntimeException("Bu barcode bilan mahsulot allaqachon mavjud. Shuning uchun mahsulot saqlanmadi.");
+            }
+        }
+
         Product product = productMapper.toEntity(dto);
         return productRepository.save(product);
     }
 
-    public Product getByBarcode(String barcode) {
-        return productRepository.findByBarcode(barcode)
-                .orElseThrow(() -> new RuntimeException("Product not found"));
+    public List<ProductDto> getByBarcode(String barcode) {
+        if (barcode != null && barcode.length() <= 3) {
+            List<Product> products = productRepository.findByBarcodeStartingWith(barcode);
+            return products.stream()
+                    .map(productMapper::toDto)
+                    .collect(Collectors.toList());
+        }
+
+        Product product = productRepository.findByBarcode(barcode)
+                .orElseThrow(() -> new RuntimeException("Mahsulot topilmadi"));
+        return Collections.singletonList(productMapper.toDto(product));
     }
+
+    public List<ProductDto> getAllWithoutBarcode() {
+        List<Product> products = productRepository.findAllByBarcodeIsNullOrBarcodeIs("");
+        return products.stream()
+                .map(productMapper::toDto)
+                .collect(Collectors.toList());
+    }
+
+
 
     public Product update(Long id, ProductDto dto) {
         Product product = productRepository.findById(id)

@@ -24,8 +24,25 @@ public class ProductController {
     }
 
     @GetMapping("/get")
-    public ResponseEntity<Product> getByBarcode(@RequestParam String barcode) {
+    public ResponseEntity<List<ProductDto>> getByBarcode(@RequestParam String barcode) {
         return ResponseEntity.ok(productService.getByBarcode(barcode));
+    }
+
+    @GetMapping("/get-all-without-barcode")
+    public ResponseEntity<List<ProductDto>> getAllWithoutBarcode() {
+        List<ProductDto> productList = productService.getAllWithoutBarcode();
+        return ResponseEntity.ok(productList);
+    }
+
+    @Operation(summary = "Get all products sorted by amount ascending")
+    @GetMapping("/get-all-admin")
+    public ResponseEntity<List<ProductDto>> getAll() {
+        return ResponseEntity.ok(productService.getAllAdmin());
+    }
+
+    @GetMapping("/get-all-POS")
+    public ResponseEntity<List<ProductDto>> getAllPOSProducts() {
+        return ResponseEntity.ok(productService.getAllPOS());
     }
 
     @PutMapping("/update")
@@ -39,16 +56,6 @@ public class ProductController {
         return ResponseEntity.ok("Deleted");
     }
 
-    @Operation(summary = "Get all products sorted by amount ascending")
-    @GetMapping("/get-all-admin")
-    public ResponseEntity<List<ProductDto>> getAll() {
-        return ResponseEntity.ok(productService.getAllAdmin());
-    }
-
-    @GetMapping("/get-all-POS")
-    public ResponseEntity<List<ProductDto>> getAllPOSProducts() {
-        return ResponseEntity.ok(productService.getAllPOS());
-    }
 
 
 }

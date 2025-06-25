@@ -6,35 +6,35 @@ import org.springframework.stereotype.Component;
 
 @Component
 public class ProductMapper {
-
     public ProductDto toDto(Product product) {
         ProductDto dto = new ProductDto();
         dto.setId(product.getId());
         dto.setName(product.getName());
-        dto.setImage(product.getImage());
-        dto.setPrice(product.getPrice());
         dto.setAmount(product.getAmount());
+        dto.setPrice(product.getPrice());
         dto.setBarcode(product.getBarcode());
+        dto.setImage(product.getImage());
         return dto;
     }
 
     public Product toEntity(ProductDto dto) {
         Product product = new Product();
         product.setName(dto.getName());
-        product.setImage(dto.getImage());
-        product.setPrice(dto.getPrice());
         product.setAmount(dto.getAmount());
+        product.setPrice(dto.getPrice());
         product.setBarcode(dto.getBarcode());
+        product.setImage(dto.getImage());
         return product;
     }
 
     public void updateEntity(Product product, ProductDto dto) {
         product.setName(dto.getName());
-        product.setImage(dto.getImage());
-        product.setPrice(dto.getPrice());
         product.setAmount(dto.getAmount());
+        product.setPrice(dto.getPrice());
         product.setBarcode(dto.getBarcode());
+        product.setImage(dto.getImage());
     }
 }
+
 
 

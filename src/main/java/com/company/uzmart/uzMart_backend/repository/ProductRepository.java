@@ -12,5 +12,9 @@ public interface ProductRepository extends JpaRepository<Product, Long> {
     Optional<Product> findByBarcode(String barcode);
 
     List<Product> findAllByOrderByAmountAsc();
+
+    List<Product> findByBarcodeStartingWith(String barcode);
+
+    List<Product> findAllByBarcodeIsNullOrBarcodeIs(String empty);
 }
 
