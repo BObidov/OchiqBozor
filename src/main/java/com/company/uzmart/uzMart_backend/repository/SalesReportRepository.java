@@ -10,7 +10,5 @@ import java.util.Optional;
 
 @Repository
 public interface SalesReportRepository extends JpaRepository<SalesReport, Long> {
-
     List<SalesReport> findAllByOrderBySaleTimeDesc();
-
 }

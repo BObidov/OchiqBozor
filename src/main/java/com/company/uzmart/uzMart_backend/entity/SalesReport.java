@@ -5,6 +5,7 @@ import jakarta.persistence.*;
 import lombok.*;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Entity
 @Table(name = "sales_report")
@@ -14,20 +15,19 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 @Builder
 public class SalesReport {
-
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private String productName;
-    private String barcode;
-    private Double price;
-    private Integer quantity;
-
-    private Double totalSum;
-
-    @Enumerated(EnumType.STRING) // bu muhim — enum nomini string sifatida saqlaydi
+    @Enumerated(EnumType.STRING)
+    @Column(name = "payment_type")
     private PaymentType paymentType;
 
     private LocalDateTime saleTime;
+    private Double totalSum;
+
+    @OneToMany(mappedBy = "salesReport", cascade = CascadeType.ALL)
+    private List<SalesItem> items;
+
+
 }
