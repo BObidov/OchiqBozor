@@ -76,6 +76,7 @@ public class ProductService {
 
         return productList.stream().map(product -> {
             ProductDto dto = new ProductDto();
+            dto.setId(product.getId());
             dto.setName(product.getName());
             dto.setAmount(product.getAmount());
             dto.setPrice(product.getPrice());
