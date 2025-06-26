@@ -18,7 +18,13 @@ public class ProductService {
     private final ProductMapper productMapper;
 
     public Product create(ProductDto dto) {
-        if (dto.getBarcode() != null && !dto.getBarcode().trim().isEmpty()) {
+        // Agar barcode bo‘sh string bo‘lsa, uni null ga o‘zgartiramiz
+        if (dto.getBarcode() != null && dto.getBarcode().trim().isEmpty()) {
+            dto.setBarcode(null);
+        }
+
+        // Agar barcode mavjud bo‘lsa — unique bo‘lishini tekshiramiz
+        if (dto.getBarcode() != null) {
             boolean exists = productRepository.findByBarcode(dto.getBarcode()).isPresent();
             if (exists) {
                 throw new RuntimeException("Bu barcode bilan mahsulot allaqachon mavjud. Shuning uchun mahsulot saqlanmadi.");
@@ -28,6 +34,7 @@ public class ProductService {
         Product product = productMapper.toEntity(dto);
         return productRepository.save(product);
     }
+
 
 
     public List<ProductDto> getByBarcode(String barcode) {
