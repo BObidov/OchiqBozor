@@ -18,7 +18,6 @@ public class ProductService {
     private final ProductMapper productMapper;
 
     public Product create(ProductDto dto) {
-        // Agar barcode mavjud bo‘lsa, uni unique ekanligini tekshiramiz
         if (dto.getBarcode() != null && !dto.getBarcode().trim().isEmpty()) {
             boolean exists = productRepository.findByBarcode(dto.getBarcode()).isPresent();
             if (exists) {
@@ -29,6 +28,7 @@ public class ProductService {
         Product product = productMapper.toEntity(dto);
         return productRepository.save(product);
     }
+
 
     public List<ProductDto> getByBarcode(String barcode) {
         if (barcode != null && barcode.length() >= 2) {
@@ -50,15 +50,36 @@ public class ProductService {
                 .collect(Collectors.toList());
     }
 
-
-
     public Product update(Long id, ProductDto dto) {
         Product product = productRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Product not found"));
 
+        // Agar barcode bo‘sh string bo‘lsa, uni null ga o‘zgartiramiz
+        if (dto.getBarcode() != null && dto.getBarcode().trim().isEmpty()) {
+            dto.setBarcode(null);
+        }
+
+        // Agar barcode mavjud bo‘lsa — unique bo‘lishini tekshiramiz
+        if (dto.getBarcode() != null) {
+            productRepository.findByBarcode(dto.getBarcode()).ifPresent(existingProduct -> {
+                if (!existingProduct.getId().equals(id)) {
+                    throw new RuntimeException("Bu barcode boshqa mahsulotga tegishli. Yangilash mumkin emas.");
+                }
+            });
+        }
+
+        // Boshqa maydonlarni yangilash
         productMapper.updateEntity(product, dto);
+
+        // Mavjud amountga yangi amountni qo‘shish (agar mavjud bo‘lsa)
+        if (dto.getAmount() != null) {
+            int yangiAmount = product.getAmount() + dto.getAmount();
+            product.setAmount(yangiAmount);
+        }
+
         return productRepository.save(product);
     }
+
 
     public void delete(Long id) {
         productRepository.deleteById(id);

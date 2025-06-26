@@ -1,0 +1,3 @@
+[submodule "external/shop-tap"]
+	path = external/shop-tap
+	url = https://github.com/JFaithTrust/shop-tap.git

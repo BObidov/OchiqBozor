@@ -29,7 +29,6 @@ public class ProductMapper {
 
     public void updateEntity(Product product, ProductDto dto) {
         product.setName(dto.getName());
-        product.setAmount(dto.getAmount());
         product.setPrice(dto.getPrice());
         product.setBarcode(dto.getBarcode());
         product.setImage(dto.getImage());
